@@ -1,5 +1,5 @@
 #ifndef EX3_HEALTH_POINTS_H
-#define EX3_HEALTH_POINTS_H 
+#define EX3_HEALTH_POINTS_H
 
 #include <iostream>
 using std::ostream;
@@ -45,6 +45,18 @@ public:
     *       a reference to the current updated HealthPoints object.
     */
     HealthPoints& operator-=(int subtraction);
+    /**
+     * getHealthPoints: (hp + 50)
+     * @return
+     *     the health points of the player plus the addition points
+     */
+    HealthPoints operator+(int addition) const;
+    /**
+     * getHealthPoints: (hp - 50)
+     * @return
+     *     the health points of the player minus the subtraction points
+     */
+    HealthPoints operator-(int subtraction) const;
 
     //---------------------------------friend functions---------------------------------
 
@@ -69,7 +81,7 @@ public:
     /**
      *  InvalidArgument:
      *  This class represents an exception that is thrown when the health points are not positive
-     */ 
+     */
     class InvalidArgument {};
 
 private:
@@ -122,19 +134,11 @@ bool operator>(const HealthPoints& hp1, const HealthPoints& hp2);
 
 /**
  * operator+: (hp1 + hp2)
- * @param hp1 - the first HealthPoints object
+ * @param addition - the number of points to add
  * @param hp2 - the second HealthPoints object
  * @return
  *     a new HealthPoints object with the sum of hp1 and hp2
  */
-HealthPoints operator+(const HealthPoints& hp1, const HealthPoints& hp2);
-/**
- * operator-: (hp1 - hp2)
- * @param hp1 - the first HealthPoints object
- * @param hp2 - the second HealthPoints object
- * @return
- *     a new HealthPoints object with the subtraction of hp2 from hp1
- */
-HealthPoints operator-(const HealthPoints& hp1, const HealthPoints& hp2);
+HealthPoints operator+(int addition, const HealthPoints& hp1);
 
 #endif /* EX3_HEALTH_POINTS_H */ 

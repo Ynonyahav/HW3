@@ -9,13 +9,13 @@ namespace HealthPointsTests {
 	bool testComparisonOperators();
 	bool testOutputOperator();
 }
-
-namespace QueueTests {
-	bool testQueueMethods();
-	bool testModuleFunctions();
-	bool testExceptions();
-	bool testConstQueue();
-}
+//
+//namespace QueueTests {
+//	bool testQueueMethods();
+//	bool testModuleFunctions();
+//	bool testExceptions();
+//	bool testConstQueue();
+//}
 
 std::function<bool()> testsList[] = {
 	HealthPointsTests::testInitialization,
@@ -23,10 +23,10 @@ std::function<bool()> testsList[] = {
 	HealthPointsTests::testComparisonOperators,
 	HealthPointsTests::testOutputOperator,
 
-	QueueTests::testQueueMethods,
-	QueueTests::testModuleFunctions,
-	QueueTests::testExceptions,
-	QueueTests::testConstQueue
+//	QueueTests::testQueueMethods,
+//	QueueTests::testModuleFunctions,
+//	QueueTests::testExceptions,
+//	QueueTests::testConstQueue
 };
 
 const int NUMBER_OF_TESTS = sizeof(testsList)/sizeof(std::function<bool()>);

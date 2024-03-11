@@ -3,14 +3,14 @@
 using namespace std;
 
 // C'tor of HealthPoints class
-HealthPoints::HealthPoints(int healthPoints) 
+HealthPoints::HealthPoints(int healthPoints)
 {
     if(healthPoints <= 0)
     {
         throw InvalidArgument();
     }
     m_HP = healthPoints;
-    m_maxHP = healthPoints;  
+    m_maxHP = healthPoints;
 }
 
 //---------------------------------Member Functions---------------------------------
@@ -35,14 +35,28 @@ HealthPoints& HealthPoints::operator+=(int addition)
 // operator-=: (hp -= 50)
 HealthPoints& HealthPoints::operator-=(int subtraction)
 {
-    *this+=(-subtraction);
+    *this += (-subtraction);
     return *this;
+}
+// getHealthPoints: (hp + 50)
+HealthPoints HealthPoints::operator+(int addition) const
+{
+    HealthPoints newHP(*this);
+    newHP += addition;
+    return newHP;
+}
+// getHealthPoints: (hp - 50)
+HealthPoints HealthPoints::operator-(int subtraction) const
+{
+    HealthPoints newHP(*this);
+    newHP -= subtraction;
+    return newHP;
 }
 
 //---------------------------------Friend Member Functions---------------------------------
 
 // operator<<: (std::cout << hp)
-ostream& operator<<(ostream& os, const HealthPoints& hp)
+std::ostream& operator<<(std::ostream& os, const HealthPoints& hp)
 {
     os << hp.m_HP << "(" << hp.m_maxHP << ")";
     return os;
@@ -80,9 +94,11 @@ bool operator<(const HealthPoints& hp1, const HealthPoints& hp2)
     return (hp1 <= hp2 && hp1 != hp2);
 }
 
-bool operator>(const HealthPoints& hp1, const HealthPoints& hp2)
+HealthPoints operator+(int addition, const HealthPoints& hp2)
 {
-    return (hp1 >= hp2 && hp1 != hp2);
+    HealthPoints newHp(hp2);
+    newHp += addition;
+    return newHp;
 }
 
 
