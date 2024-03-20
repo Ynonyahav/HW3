@@ -12,4 +12,4 @@ add_executable(HW3
         Queue.h
         TestMain.cpp
         TestUtils.cpp
-        TestUtils.h)
+        TestUtils.h QueueExampleTest.cpp)

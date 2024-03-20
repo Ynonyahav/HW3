@@ -1,11 +1,15 @@
 # ninja log v5
-2	330	7314504220916511	build.ninja	9bdb12664398fa97
-22	523	7314504228134806	CMakeFiles/HW3.dir/HealthPoints.cpp.obj	e577d98ddcf927cd
-6	543	7314504228366962	CMakeFiles/HW3.dir/TestUtils.cpp.obj	715bfe6047036ca2
-10	597	7314504228901762	CMakeFiles/HW3.dir/HealthPointsExampleTest.cpp.obj	4a3dcdcd224d4f82
-0	623	7314504229163287	CMakeFiles/HW3.dir/TestMain.cpp.obj	2e90f63c638450aa
-3	447	7314518708972179	CMakeFiles/HW3.dir/HealthPoints.cpp.obj	e577d98ddcf927cd
-11	536	7314518709860542	CMakeFiles/HW3.dir/HealthPointsExampleTest.cpp.obj	4a3dcdcd224d4f82
-3	466	7314521127166193	CMakeFiles/HW3.dir/TestMain.cpp.obj	2e90f63c638450aa
-477	1072	7314521133143674	HW3.exe	33889a6d6934a7a4
-3	578	7314543178097475	CMakeFiles/HW3.dir/HealthPoints.cpp.obj	e577d98ddcf927cd
+11	923	7326380260118723	build.ninja	9bdb12664398fa97
+3	6003	7326376944422518	CMakeFiles/HW3.dir/HealthPoints.cpp.obj	e577d98ddcf927cd
+10	6001	7326376944412514	CMakeFiles/HW3.dir/TestUtils.cpp.obj	715bfe6047036ca2
+6	537	7326377459400411	CMakeFiles/HW3.dir/TestMain.cpp.obj	2e90f63c638450aa
+0	6012	7326376944436093	CMakeFiles/HW3.dir/HealthPointsExampleTest.cpp.obj	4a3dcdcd224d4f82
+6015	7042	7326376954716343	HW3.exe	33889a6d6934a7a4
+14	797	7326380276837853	CMakeFiles/HW3.dir/HealthPoints.cpp.obj	e577d98ddcf927cd
+33	826	7326380277139599	CMakeFiles/HW3.dir/TestUtils.cpp.obj	715bfe6047036ca2
+8	909	7326380277943383	CMakeFiles/HW3.dir/HealthPointsExampleTest.cpp.obj	4a3dcdcd224d4f82
+47	925	7326380278114674	CMakeFiles/HW3.dir/QueueExampleTest.cpp.obj	2aa83cc7bdfd209e
+27	932	7326380278179043	CMakeFiles/HW3.dir/TestMain.cpp.obj	2e90f63c638450aa
+933	1556	7326380284322531	HW3.exe	750740ea57fb888f
+4	618	7326383044396785	CMakeFiles/HW3.dir/QueueExampleTest.cpp.obj	2aa83cc7bdfd209e
+618	1204	7326383050246255	HW3.exe	750740ea57fb888f
