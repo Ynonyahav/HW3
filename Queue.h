@@ -1,5 +1,7 @@
 #ifndef EX3_QUEUE_H
-#define EX3_QUEUE_H 
+#define EX3_QUEUE_H
+
+#include <exception>
 
 //---------------------------------------Queue class-------------------------------------------
 template<class T>
@@ -8,20 +10,21 @@ class Queue
 public:
     /**
      * c'tor of Queue class
-     * build the queue with one empty cell
+     * build the queue with no cells
      * 
      * @return
-     *      new queue with one cell.
+     *      new queue with no cells.
      */
     Queue();
 
     /**
-     *here we are dedclare that we dont want to use the default c'tor of copy and - and 
+     *here we are dedclare that we dont want to use the default c'tor of copy and operator = 
      *and d'ctor and we will implicit them later
     */
     Queue(const Queue&);
     ~Queue();
     Queue& operator=(const Queue&);
+
 
     /**
      * this is aid function
@@ -33,40 +36,32 @@ public:
     bool isEmpty() const;
 
     /**
-     * this is aid function
-     * return the mode of the queue
-     *
-     * @return bool - return true if the queue is full else false
-     *
-     */
-    bool isFull() const;
-
-     /**
-     * this is aid function
-     * in case that the queue is full expend the queue with EXPEND_RATE cells
-     */
-    void expend();
-
-    /**
      * get new parameter T and push it in the end of the queue
      *
      * @param T - object to place in the queue.
      *
      */
-    void pushback(const T object);
+    void pushBack(const T object);
 
     /**
+     * for const object
      * return the fist object in the queue
      *
      * @return &T - object to place in the queue.
      *
      */
-    T& front() const;
+    const T& front() const;
 
     /**
-     * remove and free the memory of the first objecct in the queue
+     * return the fist object in the queue
+     * 
+     * @return &T - object to place in the queue.
+    */
+    T& front();
+    /**
+     * remove and free the memory of the m_first objecct in the queue
      *
-     * @return T - the first object in the queue.
+     * @return T - the m_first object in the queue.
      */
     void popFront();
 
@@ -78,218 +73,242 @@ public:
 
     //kind of declaration for iterator class
     class Iterator; 
-    Iterator begin() const; 
-    Iterator end() const; 
+    Iterator begin(); 
+    Iterator end();
+
+    //kind of declaration for ConstIterator class
+    class ConstIterator; 
+    ConstIterator begin() const; 
+    ConstIterator end() const;
 
     class EmptyQueue {};
 
 private:
 
-    T* info;
-    int current_size;
-    int max_size;
-
-    static const int INTITIAL_SIZE=1;
-    static const int EXPEND_RATE=5;
-    static const int QUEUE_IS_EMPTY= 0;
+    class Node;
+    Node* m_first;
+    Node* m_lest;
+    int m_total_size;
 };
 
-//------------------------------------iterator class-------------------------------------------
+//---------------------------------------Node class-------------------------------------------
+template<class T>
+class Queue<T>::Node {
+public:
+
+    Node(const T& object) : m_info(object), m_next(nullptr) {};                                    //the c'tor
+    Node(const Node&)= default;                               //all others c'tors are default
+    Node& operator=(const Node&)= default;
+    ~Node()= default;
+
+    void destroyNode(Node *node);
+
+    T m_info;
+    Node* m_next;
+
+};
+
+//------------------------------------iterator class + implementation-------------------------------------------
 template<class T>
 class Queue<T>::Iterator
 { 
 public: 
 
-    const T& operator*() const;                               //pointer to object with iterator
-    Iterator& operator++();                                   //prefix iterator 
-    bool operator!=(const Iterator& iterator) const;          //
-    Iterator(const Iterator&) = default;                      //copy c'tor
-    Iterator& operator=(const Iterator&) = default;           // operator= c'tor
-    class InvalidOperatio {};
+    Iterator(typename Queue<T>::Node* node);     //c'tor of iterator
+    ~Iterator()= default;                                     //default destroyer
+    Iterator(const Iterator&) = default;                      //default copy c'tor
+    Iterator& operator=(const Iterator&) = default;           //default operator= c'tor
+    Iterator& operator++();
+    T& operator*();
+    bool operator!=(const Iterator& iterator);
+
+    class InvalidOperation {};
 
 private:
 
-    const Queue<T>* queue; 
-    int index; 
-    Iterator(const Queue<T>* queue, int index);               //c'tor of iterator
-    friend class Queue<T>; 
+    Queue<T>::Node* current_node;
+    
 };
-
-//------------------------------------iterator implementation-------------------------------------------
-
-//c'tor of the iterator class
+//--------------------------------ConstIterator class+ implementation-------------------------------------------
 template<class T>
-Queue<T>::Iterator::Iterator(const Queue<T>* queue, int index) :
-    queue(queue),
-    index(index)
-{ }
-
-template<class T> 
-const T& Queue<T>::Iterator::operator*() const 
+class Queue<T>::ConstIterator
 { 
-    assert(index >= 0 && index < queue->size()); 
-    return queue->info[index]; 
-} 
+public: 
 
-//prefix operator to iterator
-template<class T> 
-typename Queue<T>::Iterator& Queue<T>::Iterator::operator++()
-{ 
-    ++index;
-    if(index)
-    {
-        throw InvalidOperatio();
-    }
-    return *this; 
+    ConstIterator(const Queue<T>::Node* node);                           //c'tor of iterator
+    ~ConstIterator()= default;                                          //default destroyer
+    ConstIterator(const ConstIterator&) = default;                      //default copy c'tor
+    ConstIterator& operator=(const ConstIterator&) = default;           //default operator= c'tor
+
+    const T& operator*() const;                               //pointer to object with iterator
+    ConstIterator& operator++();                                  //prefix iteratorbool
+    bool operator!=(const ConstIterator& iterator) const;          //check != between 2 iterators
+
+
+        class InvalidOperation {};
+
+private:
+
+    const Queue<T>::Node* current_node;
+};
+//-------------------------------begin and end ConstIterator implementation-------------------------------------------
+
+//this function give the begin iterator
+template<class T>
+typename Queue<T>::ConstIterator Queue<T>::begin() const 
+{
+    return ConstIterator(m_first);
 }
 
+//this function give the end iterator
 template<class T> 
-bool Queue<T>::Iterator::operator!=(const Iterator& it2) const
+typename Queue<T>::ConstIterator Queue<T>::end() const 
 { 
-    return !(*this == it2); 
+    return ConstIterator(nullptr); 
 }
 
 //--------------------------------begin and end iterator implementation-------------------------------------------
 
 //this function give the begin iterator
 template<class T>
-typename Queue<T>::Iterator Queue<T>::begin() const 
+typename Queue<T>::Iterator Queue<T>::begin() 
 {
-    return Iterator(this, 0);
+    return Iterator(m_first);
 }
 
 //this function give the end iterator
 template<class T> 
-typename Queue<T>::Iterator Queue<T>::end() const 
+typename Queue<T>::Iterator Queue<T>::end()
 { 
-    return Iterator(this, size); 
+    return Iterator(nullptr); 
+}
+//----------------------------------Node destroyNode implementation-------------------------------------------
+
+template<class T>
+void Queue<T>::Node::destroyNode(Node *node)
+{
+    if(node->m_next != nullptr){
+        destroyNode(node->m_next);
+    }
+    delete node;
 }
 //----------------------------------all the c'tor of queue-------------------------------------------
 
 //main constructor
 template<class T>
 Queue<T>::Queue() :
-    info(new T[INTITIAL_SIZE]),
-    current_size(0),
-    max_size(INTITIAL_SIZE)
+    m_first(nullptr),
+    m_lest(nullptr),
+    m_total_size(0)
     {}
 
 //destructor
 template<class T>
 Queue<T>::~Queue() {
-    delete[] info;
+    if(m_first != nullptr){
+        m_first->destroyNode(m_first);
+    }
 }
 
 //copy constuctor
 template<class T>
-Queue<T>::Queue(const Queue& queue) :
-    info(new T[max(queue.size(),INTITIAL_SIZE)]),
-    current_size(queue.size()),
-    max_size(max(queue.size(),INTITIAL_SIZE))
+Queue<T>::Queue(const Queue<T>& other)
 {
-    for(int i=0; i<current_size ; i++){
-        info[i]= queue.info[i];
+    this->m_total_size = 0;
+    this->m_first = nullptr;
+    this->m_lest = nullptr;
+    for(typename Queue<T>::ConstIterator it = other.begin(); it != other.end(); ++it){
+    try{
+        this->pushBack(*it);
+    }
+    catch(const std::bad_alloc& e){
+        delete[] this;
+        throw e;
+        }
     }
 }
 
 //operator= constuctor
 template<class T>
-Queue<T>& Queue<T>::operator=(const Queue& queue) 
+Queue<T>& Queue<T>::operator=(const Queue& queue)
 {
-  if (this == &queue)
-    {
-        return *this;
+    Queue<T> temp= queue;
+    if(temp.m_size != queue.m_size){
+        throw std::bad_alloc();
     }
-    delete[] info;
-    info = new T[max(queue.size(),INTITIAL_SIZE)];
-    current_size = queue.size();
-    max_size = max(queue.size(),INTITIAL_SIZE);
-    for(int i=0; i< current_size ; i++)
-    {
-        info[i]= queue.info[i];
-    }
-return *this;
+    this->~Queue();
+    this->m_first= queue.m_first;
+    this->current_size= queue.current_size;
+    return *this;
 }
+
 //---------------------------------all the aid functions of queue-------------------------------------------
 
 //aid function #1
 template<class T>
 bool Queue<T>::isEmpty() const
 {
-    if(current_size==0){
-        return true;
-    }
-    return false;
-}
-
-//aid function #2
-template<class T>
-bool Queue<T>::isFull() const
-{
-    if(current_size==max_size){
-        return true;
-    }
-    return false;
-}
-
-//aid function #3
-template<class T>
-void Queue<T>::expend()
-{
-    int new_size= max_size+ EXPEND_RATE;
-    T* new_info= new T[new_size];
-    for(int i=0; i<current_size ;i++){
-        new_info[i]= info[i];
-    }
-    delete info;
-    info= new_info;
-    max_size=new_size;
+    return m_first == nullptr;
 }
 
 //----------------------------------all the member functions of queue-------------------------------------------
+
 template<class T>
-void Queue<T>::pushback(const T object)
+void Queue<T>::pushBack(const T object)
 {
-    if(isFull()){
-        expend();
+    Node* newNode = new Node(object);
+    m_total_size++;
+    if (isEmpty()) {
+        m_first = m_lest = newNode;
+    } else {
+        m_lest->m_next = newNode;
+        m_lest = newNode;
     }
-    info[current_size]= object;
-    current_size++;
 }
 
 template<class T>                    
-T& Queue<T>::front() const
+const T& Queue<T>::front() const
 {
     if(isEmpty()){
-        throw EmptyQueue();                    //need add something
+        throw Queue<T>::EmptyQueue();
     }
-    return info[0];
+    return m_first->m_info;
+}
+
+template<class T>
+T& Queue<T>::front()
+{
+    if(isEmpty()){
+        throw Queue<T>::EmptyQueue();
+    }
+    return m_first->m_info;
 }
 
 template<class T>
 void Queue<T>::popFront()
 {
     if(isEmpty()){
-        throw EmptyQueue();                              //need add something
+        throw EmptyQueue();
     }
-    T* new_info=new T[max_size];           // notice- if size is 1 then weget new empty queue
-    if(current_size>1)
-    {
-        for(int i=0; i<current_size; i++)
-        {
-            new_info[i]=info[i+1]
-        }                   
+    //if there is only one node
+    if(m_first == m_lest){
+        delete m_first;
+        m_first = m_lest = nullptr;
+        m_total_size--;
+        return;
     }
-    delete[] info;
-    info= new_info;
-    current_size--;
+    Node* temp_node = m_first;
+    m_first = m_first->m_next;
+    m_total_size--;
+    delete temp_node;
 }
 
 template<class T>
 int Queue<T>::size() const
 {
-    return current_size;
+    return m_total_size;
 }
+
 //----------------------------------------all the external functions-------------------------------------------
 
 /**
@@ -300,15 +319,15 @@ int Queue<T>::size() const
      *                    object will be in the new list
      * 
      * @return  new_queue -which is the filtered queue
-     */
-template<class T, typename condition>
-Queue<T> filter(const Queue<T>& queue,const condition condition)
+*/
+template<class T, typename Condition>
+Queue<T> filter(const Queue<T>& queue,const Condition condition)
 {
     Queue<T> new_queue;
-    for(T& object : queue){
-        if(condition(object)==true)
+    for(const T& it : queue){
+        if(condition(it))
         {
-            new_queue.pushback(object);
+            new_queue.pushBack(it);
         }
     }
     return new_queue;
@@ -319,15 +338,13 @@ Queue<T> filter(const Queue<T>& queue,const condition condition)
      *
      * @param  queue- queue to change his objects.
      * @param  condition- The name of the function or function object that modify the objects
-     */
-template<class T, typename condition>
-void transform(const Queue<T>& queue,const condition condition)
+*/
+template<class T, typename Condition>
+void transform(Queue<T>& queue, const Condition condition)
 {
-    Queue<T> new_queue;
-    for(T& object : queue){
-        new_queue.pushback(condition(object));
+    for(typename Queue<T>::Iterator it = queue.begin(); it != queue.end(); ++it){
+        *it = condition(*it);
     }
-    return new_queue;
 }
 
 /**
@@ -335,19 +352,77 @@ void transform(const Queue<T>& queue,const condition condition)
      *
      * @param  queue- queue to change his objects.
      * @param  condition- The name of the function or function object that modify the objects
-     */
-template<class T, typename T2, typename condition>
-T2& reduce(const Queue<T>& queue,T2& initial_value,const condition condition)
+*/
+template<class T, class T2, typename Condition>
+T2 reduce(const Queue<T>& queue,T2 initial_value,const Condition condition)
 {
     if(queue.isEmpty()){
         return initial_value;
     }
-    for(T& object : queue){
-        initial_value=condition(initial_value&, object);
+    for(typename Queue<T>::ConstIterator it = queue.begin(); it != queue.end(); ++it){
+        initial_value=condition(initial_value, *it);
     }
     return initial_value;
 }
 
-#endif
+//----------------------------------------all the iterator functions-------------------------------------------
 
-#endif /* EX3_QUEUE_H */ 
+template<class T>
+Queue<T>::Iterator::Iterator(typename Queue<T>::Node* node) : current_node(node){}     //c'tor of iterator
+
+template<class T>
+typename Queue<T>::Iterator& Queue<T>::Iterator::operator++(){
+    if(this->current_node == nullptr){
+        throw Queue::Iterator::InvalidOperation();
+    }
+    this->current_node = this->current_node->m_next;
+    return *this;
+}
+
+template<class T>
+T& Queue<T>::Iterator::operator*()
+{                               //pointer to object with iterator
+    if(current_node == nullptr){
+        throw Queue::Iterator::InvalidOperation();
+    }
+    return this->current_node->m_info;
+}
+
+template<class T>
+bool Queue<T>::Iterator::operator!=(const Iterator& iterator)
+{          //check != between 2 iterators
+    return current_node!= iterator.current_node;
+}
+
+//----------------------------------------all the ConstIterator functions-------------------------------------------
+
+template<class T>
+Queue<T>::ConstIterator::ConstIterator(const typename Queue<T>::Node* node) : current_node(node){}   //c'tor of iterator
+
+template<class T>
+const T& Queue<T>::ConstIterator::operator*() const{                               //pointer to object with iterator
+    if(current_node == nullptr){
+        throw InvalidOperation();
+    }
+    return current_node->m_info;
+}
+
+template<class T>
+typename Queue<T>::ConstIterator& Queue<T>::ConstIterator::operator++()
+{                                   //prefix iterator
+    if(this->current_node == nullptr)
+    {
+        throw InvalidOperation();
+    }
+    this->current_node = this->current_node->m_next;
+    return *this;
+}
+
+template<class T>
+bool Queue<T>::ConstIterator::operator!=(const ConstIterator& iterator) const
+{          //check != between 2 iterators
+    return (this->current_node != iterator.current_node);
+}
+
+
+#endif   //EX3_QUEUE_H
