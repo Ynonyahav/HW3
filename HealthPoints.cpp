@@ -102,6 +102,3 @@ HealthPoints operator+(int addition, const HealthPoints& hp2)
 }
 
 
-
-
-
