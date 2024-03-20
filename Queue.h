@@ -11,14 +11,14 @@ public:
     /**
      * c'tor of Queue class
      * build the queue with no cells
-     *
+     * 
      * @return
      *      new queue with no cells.
      */
     Queue();
 
     /**
-     *here we are dedclare that we dont want to use the default c'tor of copy and operator =
+     *here we are dedclare that we dont want to use the default c'tor of copy and operator = 
      *and d'ctor and we will implicit them later
     */
     Queue(const Queue&);
@@ -54,7 +54,7 @@ public:
 
     /**
      * return the fist object in the queue
-     *
+     * 
      * @return &T - object to place in the queue.
     */
     T& front();
@@ -66,19 +66,19 @@ public:
     void popFront();
 
     /**
-     * @return
+     * @return 
      *      the size of queue
      */
     int size() const;
 
     //kind of declaration for iterator class
-    class Iterator;
-    Iterator begin();
+    class Iterator; 
+    Iterator begin(); 
     Iterator end();
 
     //kind of declaration for ConstIterator class
-    class ConstIterator;
-    ConstIterator begin() const;
+    class ConstIterator; 
+    ConstIterator begin() const; 
     ConstIterator end() const;
 
     class EmptyQueue {};
@@ -111,8 +111,8 @@ public:
 //------------------------------------iterator class + implementation-------------------------------------------
 template<class T>
 class Queue<T>::Iterator
-{
-public:
+{ 
+public: 
 
     Iterator(typename Queue<T>::Node* node);     //c'tor of iterator
     ~Iterator()= default;                                     //default destroyer
@@ -127,13 +127,13 @@ public:
 private:
 
     Queue<T>::Node* current_node;
-
+    
 };
 //--------------------------------ConstIterator class+ implementation-------------------------------------------
 template<class T>
 class Queue<T>::ConstIterator
-{
-public:
+{ 
+public: 
 
     ConstIterator(const Queue<T>::Node* node);                           //c'tor of iterator
     ~ConstIterator()= default;                                          //default destroyer
@@ -145,7 +145,7 @@ public:
     bool operator!=(const ConstIterator& iterator) const;          //check != between 2 iterators
 
 
-    class InvalidOperation {};
+        class InvalidOperation {};
 
 private:
 
@@ -155,32 +155,32 @@ private:
 
 //this function give the begin iterator
 template<class T>
-typename Queue<T>::ConstIterator Queue<T>::begin() const
+typename Queue<T>::ConstIterator Queue<T>::begin() const 
 {
     return ConstIterator(m_first);
 }
 
 //this function give the end iterator
-template<class T>
-typename Queue<T>::ConstIterator Queue<T>::end() const
-{
-    return ConstIterator(nullptr);
+template<class T> 
+typename Queue<T>::ConstIterator Queue<T>::end() const 
+{ 
+    return ConstIterator(nullptr); 
 }
 
 //--------------------------------begin and end iterator implementation-------------------------------------------
 
 //this function give the begin iterator
 template<class T>
-typename Queue<T>::Iterator Queue<T>::begin()
+typename Queue<T>::Iterator Queue<T>::begin() 
 {
     return Iterator(m_first);
 }
 
 //this function give the end iterator
-template<class T>
+template<class T> 
 typename Queue<T>::Iterator Queue<T>::end()
-{
-    return Iterator(nullptr);
+{ 
+    return Iterator(nullptr); 
 }
 //----------------------------------Node destroyNode implementation-------------------------------------------
 
@@ -197,10 +197,10 @@ void Queue<T>::Node::destroyNode(Node *node)
 //main constructor
 template<class T>
 Queue<T>::Queue() :
-        m_first(nullptr),
-        m_lest(nullptr),
-        m_total_size(0)
-{}
+    m_first(nullptr),
+    m_lest(nullptr),
+    m_total_size(0)
+    {}
 
 //destructor
 template<class T>
@@ -218,12 +218,12 @@ Queue<T>::Queue(const Queue<T>& other)
     this->m_first = nullptr;
     this->m_lest = nullptr;
     for(typename Queue<T>::ConstIterator it = other.begin(); it != other.end(); ++it){
-        try{
-            this->pushBack(*it);
-        }
-        catch(const std::bad_alloc& e){
-            delete[] this;
-            throw e;
+    try{
+        this->pushBack(*it);
+    }
+    catch(const std::bad_alloc& e){
+        delete[] this;
+        throw e;
         }
     }
 }
@@ -266,7 +266,7 @@ void Queue<T>::pushBack(const T object)
     }
 }
 
-template<class T>
+template<class T>                    
 const T& Queue<T>::front() const
 {
     if(isEmpty()){
@@ -315,9 +315,9 @@ int Queue<T>::size() const
      * change all the object in queue by given function
      *
      * @param  queue- queue to change his objects.
-     * @param  condition- The name of the function or function object that set if the
+     * @param  condition- The name of the function or function object that set if the 
      *                    object will be in the new list
-     *
+     * 
      * @return  new_queue -which is the filtered queue
 */
 template<class T, typename Condition>
